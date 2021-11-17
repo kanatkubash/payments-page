@@ -1,0 +1,45 @@
+#main {
+  margin: 20px;
+}
+.header {
+  background: #ccc;
+  font-weight: 600;
+}
+.row:not(.header):not(.sub):nth-of-type(even) {
+  background: #eee;
+}
+.row > * {
+  word-wrap: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.row:not(.sub) {
+  margin: 0;
+  border-bottom: #666 1px solid;
+}
+.row:not(.header):not(.sub):hover {
+  cursor: pointer;
+  background: #ff931e73;
+}
+.row.selected {
+  background: rgba(0, 255, 0, 0.4) !important;
+}
+.sub.row.selected {
+  background: rgba(0, 255, 0, 0.2) !important;
+}
+.sub.row {
+  margin: 0 50px;
+}
+.col {
+  border: 1px solid white;
+  padding: 10px !important;
+}
+.col:empty::before {
+  content: "\00a0";
+}
+h5 {
+  margin-top: 50px;
+}
+.btn-large {
+  background: #ff931e;
+}

@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>TradingSolutions: S&#246;k</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script
+        src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/ts-browser"></script>
+    <script src="./db.js"></script>
+    <script type="text/typescript" src="./index.ts"></script>
+</head>
+
+<body>
+    <script id="payment-header-template" type="text/x-handlebars-template">
+      <div class="row bold header">
+        <div class="col l2">Ocr</div>
+        <div class="col l4">Company</div>
+        <div class="col l1">PayDate</div>
+        <div class="col l4">TransactionId</div>
+        <div class="col l1">PayAmount</div>
+      </div>
+    </script>
+    <script id="payment-template" type="text/x-handlebars-template">
+      <div class="row {{#isSelected}}selected{{/isSelected}}" onclick="event.ctrlKey && toggleSelectPayment({{id}})">
+        <div class="col l2">{{ocr}}</div>
+        <div class="col l4">{{company}}</div>
+        <div class="col l1">{{date payDate}}</div>
+        <div class="col l4">{{transactionId}}</div>
+        <div class="col l1">{{payAmount}}</div>
+      </div>
+    </script>
+    <script id="invoice-template" type="text/x-handlebars-template">
+      <div class="row {{#isSelected}}selected{{/isSelected}}" onclick="event.ctrlKey && toggleSelectInvoice({{id}})">
+        <div class="col l2">{{ocr}}</div>
+        <div class="col l2">{{invoiceNumber}}</div>
+        <div class="col l3">{{consumer}}</div>
+        <div class="col l2">{{licensePlate}}</div>
+        <div class="col l2">{{date payDate}}</div>
+        <div class="col l1">{{payAmount}}</div>
+      </div>
+    </script>
+    <script id="verification-template" type="text/x-handlebars-template">
+      <div class="row {{#isSelected}}selected{{/isSelected}}" onclick="event.ctrlKey ? toggleSelectVerification({{id}}) : expandVerification({{id}})">
+        <div class="col l2">{{ocr}}</div>
+        <div class="col l2">{{invoiceNumber}}</div>
+        <div class="col l4">{{company}}</div>
+        <div class="col l3">{{licensePlate}}</div>
+        <div class="col l1">{{value}}</div>
+      </div>
+      {{#expanded}}
+            <div class="sub row {{#isSelected}}selected{{/isSelected}}">
+            <div class="col l12">
+                Payments
+                {{#each payments}}
+                    {{>payment}}
+                {{/each}}
+            </div>
+            <div class="divider"></div>
+            <div class="col l12">
+                Invoices
+                {{!-- {{>invoiceHeader}} --}}
+                {{#each invoices}}
+                    {{>invoice}}
+                {{/each}}
+            </div>
+            </div>
+        {{/expanded}}
+    </script>
+    <script id="verification-header-template" type="text/x-handlebars-template">
+      <div class="row header">
+        <div class="col l2">Ocr</div>
+        <div class="col l2">InvoiceNumber</div>
+        <div class="col l4">Company</div>
+        <div class="col l3">LicensePlate</div>
+        <div class="col l1">Value</div>
+      </div>
+    </script>
+    <script id="invoice-header-template" type="text/x-handlebars-template">
+      <div class="row header">
+        <div class="col l2">Ocr</div>
+        <div class="col l2">InvoiceNumber</div>
+        <div class="col l3">Company</div>
+        <div class="col l2">LicensePlate</div>
+        <div class="col l2">PayDate</div>
+        <div class="col l1">PayAmount</div>
+      </div>
+    </script>
+    <div id="main">
+        <button class="btn-large {{cantMerge}}" onclick="merge()">Confirm merge</button>
+        <h5>Unmatched payments</h5>
+        {{>paymentHeader}}
+        {{#each unmatchedPayments}}
+            {{>payment}}
+        {{/each}}
+        <h5>Surplus/Deficit matches</h5>
+        {{>verificationHeader}}
+        {{#each surplusDeficitVerificationsGroups}}
+            {{>verificationGroup}}
+        {{/each}}
+        <h5>Unpaid invoices</h5>
+        {{>invoiceHeader}}
+        {{#each unpaidInvoices}}
+            {{>invoice}}
+        {{/each}}
+    </div>
+</body>
+
+</html>
